@@ -1,34 +1,42 @@
-name: Actions 😎
+name: Unity Test Runner
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 on: [pull_request]
 
 jobs:
-  build:
-    name: Build my project ✨
+  testAllModes:
+    name: Test in ${{ matrix.testMode }} on version ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - ./
+        unityVersion:
+          - 2020.3.1f1
+        testMode:
+          - playmode
+          - editmode
     steps:
-      # Checkout
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v2
         with:
-          lfs: true
-
-      # Cache
-      - uses: actions/cache@v2
+          lfs: false # will be true eventually
+      - name: Cache
+        uses: actions/cache@v2
         with:
-          path: Library
-          key: Library
-
-      # Test
-      - name: Run tests
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}
+          restory-keys: |
+            Library-
+      - name: Tests
         uses: game-ci/unity-test-runner@v2
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
+          projectPath: ${{ matrix.projectPath }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-
-      # Output
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Build
-          path: build
+          artifactsPath: ${{ matrix.testMode }}-artifacts
+          unityVersion: ${{ matrix.unityVersion }}
+          testMode: ${{ matrix.testMode }}
+          checkName: ${{ matrix.testMode }} Test Results
