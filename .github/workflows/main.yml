@@ -35,7 +35,7 @@ jobs:
         uses: game-ci/unity-test-runner@v2
         with:
           projectPath: ${{ matrix.projectPath }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          githubToken: ${{ secrets.TOKEN_LOL }}
           artifactsPath: ${{ matrix.testMode }}-artifacts
           unityVersion: ${{ matrix.unityVersion }}
           testMode: ${{ matrix.testMode }}
