@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
-namespace popspells
+namespace popspells.scripts.controllers
 {
     [RequireComponent(typeof(NavMeshAgent))]
     public class PlayerController : MonoBehaviour
