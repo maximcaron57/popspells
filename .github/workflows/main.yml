@@ -26,7 +26,6 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          path: 'Assets/Tests/'
 
       # Output
       - uses: actions/upload-artifact@v2
