@@ -13,11 +13,11 @@ jobs:
         with:
           lfs: true
 
-      # # Cache
-      # - uses: actions/cache@v2
-      #   with:
-      #     path: Library
-      #     key: Library
+      # Cache
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library
 
       # Test
       - name: Run tests
@@ -28,15 +28,15 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       # Build
-       - name: Build project
-         uses: game-ci/unity-builder@v2
-         env:
-           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-         with:
-           targetPlatform: WebGL
+      - name: Build project
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: WebGL
 
-        # Output
-        - uses: actions/upload-artifact@v2
-         with:
-           name: Build
-           path: build
+      # Output
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build
+          path: build
