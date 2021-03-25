@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.popspells.dependencypack": {
+      "version": "https://github.com/maximcaron57/popspellsdependencypack.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8358919ac953117f085d28ccc6df2b262f24248a"
+    },
     "com.unity.collab-proxy": {
       "version": "1.3.9",
       "depth": 0,
