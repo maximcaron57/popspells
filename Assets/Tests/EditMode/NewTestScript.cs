@@ -6,20 +6,16 @@ using UnityEngine.TestTools;
 
 public class NewTestScript
 {
-    // A Test behaves as an ordinary method
     [Test]
-    public void NewTestScriptSimplePasses()
+    public void TestIncrement()
     {
-        // Use the Assert class to test conditions
-    }
+        // Given
+        var counter = 0;
 
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
-    [UnityTest]
-    public IEnumerator NewTestScriptWithEnumeratorPasses()
-    {
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-        yield return null;
+        // When
+        counter += 1;
+
+        // Then
+        Assert.AreEqual(1, counter);
     }
 }
