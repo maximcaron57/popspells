@@ -12,8 +12,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        projectPath:
-          - ./
         unityVersion:
           - 2020.3.1f1
         testMode:
@@ -29,13 +27,13 @@ jobs:
         with:
           path: ${{ matrix.projectPath }}/Library
           key: Library-${{ matrix.projectPath }}
-          restory-keys: |
+          restore-keys: |
             Library-
       - name: Tests
         uses: game-ci/unity-test-runner@v2
         with:
           projectPath: ${{ matrix.projectPath }}
-          githubToken: ${{ secrets.TOKEN_LOL }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
           artifactsPath: ${{ matrix.testMode }}-artifacts
           unityVersion: ${{ matrix.unityVersion }}
           testMode: ${{ matrix.testMode }}
