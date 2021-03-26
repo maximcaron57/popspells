@@ -1,42 +1,227 @@
-name: Unity Test Runner
+name: CI
 
-env:
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-
-on: [pull_request]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
 
 jobs:
-  testAllModes:
-    name: Test in ${{ matrix.testMode }} on version ${{ matrix.unityVersion }}
+  test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        # projectPath:
-          # - ./
         unityVersion:
           - 2020.3.1f1
-        testMode:
-          - playmode
-          - editmode
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          lfs: false # will be true eventually
-      # - name: Cache
-        # uses: actions/cache@v2
+      - uses: actions/checkout@v2
+
+      # - uses: testspace-com/setup-testspace@v1
         # with:
-          # path: ${{ matrix.projectPath }}/Library
-          # key: Library-${{ matrix.projectPath }}
-          # restore-keys: |
-            # Library-
-      - name: Tests
-        uses: game-ci/unity-test-runner@v2
+          # domain: ${{github.repository_owner}}
+
+      - name: Cache
+        uses: actions/cache@v2.1.2
         with:
-          projectPath: ${{ matrix.projectPath }}
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          artifactsPath: ${{ matrix.testMode }}-artifacts
+          path: Library
+          key: Library-${{ matrix.unityVersion }}
+
+      - name: Run tests
+        id: tests
+        uses: game-ci/unity-test-runner@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with: 
           unityVersion: ${{ matrix.unityVersion }}
-          testMode: ${{ matrix.testMode }}
-          checkName: ${{ matrix.testMode }} Test Results
+          customParameters: -enableCodeCoverage
+            -coverageResultsPath "artifacts/CodeCoverage/"
+            -coverageOptions assemblyFilters:+Responsible,+Responsible.Editor
+            -nographics
+            -disable-assembly-updater
+      
+      # - name: Push to testspace
+        # if: ${{ always() }}
+        # run: testspace
+          # [${{ matrix.unityVersion }}]artifacts/editmode-results.xml
+          # [${{ matrix.unityVersion }}]artifacts/playmode-results.xml
+
+      - name: Push to codecov.io
+        uses: codecov/codecov-action@v1
+        if: matrix.unityVersion == '2019.4.14f1'
+        with:
+          files: |
+            artifacts/CodeCoverage/workspace-opencov/EditMode/TestCoverageResults_0000.xml,
+            artifacts/CodeCoverage/workspace-opencov/PlayMode/TestCoverageResults_0000.xml
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: Archive test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2.2.0 
+        with:
+          name: Test Results ${{ matrix.unityVersion }}
+          path: artifacts
+
+  markdown:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gaurav-nelson/github-action-markdown-link-check@v1
+
+  inspectcode:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Cache Library
+        uses: actions/cache@v2.1.2
+        with:
+          path: Library
+          key: Library-resharper
+
+      - name: Run ReSharper in Unity
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with: 
+          customImage: thesbergen/unityci-resharper
+          targetPlatform: StandaloneLinux64
+          buildMethod: Responsible.EditorSetup.ContinuousIntegration.InspectCode
+          customParameters: -disable-assembly-updater
+
+      - name: Archive ReSharper run
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2.2.0 
+        with:
+          name: ReSharper
+          path: |
+            resharper/inspect.xml
+            resharper/stdout.txt
+            resharper/stderr.txt
+
+      - name: ReSharper XML -> GitHub output
+        if: ${{ always() }}
+        uses: glassechidna/resharper-action@v1
+        with:
+          report: resharper/inspect.xml
+
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Library
+        uses: actions/cache@v2.1.2
+        with:
+          path: Library
+          key: Library-docfx
+
+      - name: Generate docs
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with: 
+          customImage: thesbergen/unityci-docfx
+          targetPlatform: StandaloneLinux64
+          buildMethod: Responsible.EditorSetup.ContinuousIntegration.BuildDocumentation
+          customParameters: -disable-assembly-updater
+
+      - name: Archive docs
+        uses: actions/upload-artifact@v2.2.0 
+        with:
+          name: Docs
+          path: docfx/docs_site
+
+      - name: Deploy docs
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          branch: gh-pages
+          folder: docfx/docs_site/ResponsibleDocs
+          dry-run: ${{ github.ref != 'refs/heads/main' }}
+
+  # version-info:
+    # runs-on: ubuntu-latest
+
+    # outputs:
+      # old-version: ${{ steps.parse-tag-version.outputs.version }}
+      # new-version: ${{ steps.package-version.outputs.prop }}
+      # changelog-body: ${{ steps.changelog.outputs.changes }}
+      # tag-name: ${{ steps.create-tag-name.outputs.tag }}
+
+    # steps:
+      # - uses: actions/checkout@v2
+
+      # - name: Get latest release info
+        # id: latest-release
+        # uses: thebritican/fetch-latest-release@v2.0.0
+        # with:
+          # github_token: ${{ secrets.GITHUB_TOKEN}}
+
+      # - name: Parse version from tag
+        # id: parse-tag-version
+        # run: |
+          # tag=$(echo ${{ steps.latest-release.outputs.tag_name }})
+          # echo "::set-output name=version::${tag:1}"
+
+      # - name: Read current package version
+        # id: package-version
+        # uses: notiz-dev/github-action-json-property@release
+        # with: 
+          # path: Packages/Responsible/package.json
+          # prop_path: 'version'
+
+      # - name: Get latest changelog entry
+        # id: changelog
+        # uses: mindsers/changelog-reader-action@v2
+
+      # - name: Output status
+        # run: |
+          # echo "Previous version from tags: ${{ steps.parse-tag-version.outputs.version }}"
+          # echo "Current version from package.json: ${{ steps.package-version.outputs.prop }}"
+          # echo "Current version from CHANGELOG.md: ${{ steps.changelog.outputs.version }}"
+
+      # - name: Check that changelog is up to date with package.json
+        # run: test ${{ steps.package-version.outputs.prop }} = ${{ steps.changelog.outputs.version }}
+
+      # - name: Create tag name
+        # id: create-tag-name
+        # run: echo "::set-output name=tag::v${{ steps.package-version.outputs.prop }}"
+
+  # release:
+    # runs-on: ubuntu-latest
+    # name: Create Release
+    # needs: [ version-info, docs ]
+    # if: |
+      # github.ref == 'refs/heads/main' &&
+      # needs.version-info.outputs.new-version != needs.version-info.outputs.old-version
+
+    # steps:
+      # - uses: actions/checkout@v2
+
+      # - uses: actions/download-artifact@v2
+        # name: Download Docs
+        # with:
+          # name: Docs
+      
+      # - name: Zip files
+        # run: |
+          # pushd Packages && zip -r ../Responsible.zip Responsible && popd
+          # zip -r ResponsibleDocs.zip ResponsibleDocs
+
+      # - uses: softprops/action-gh-release@v1
+        # with:
+          # fail_on_unmatched_files: true
+          # body: ${{ needs.version-info.outputs.changelog-body }}
+          # tag_name: ${{ needs.version-info.outputs.tag-name }}
+          # files: |
+            # ResponsibleDocs.zip
+            # Responsible.zip
+        # env:
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
