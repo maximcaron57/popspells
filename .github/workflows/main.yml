@@ -42,6 +42,8 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneWindows # Build a Windows standalone.
+        unityVersion:
+          - 2020.3.1f1
 
     steps:
       - uses: actions/checkout@v2
