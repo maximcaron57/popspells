@@ -49,7 +49,7 @@ jobs:
           files: |
             artifacts/CodeCoverage/workspace-opencov/EditMode/TestCoverageResults_0000.xml,
             artifacts/CodeCoverage/workspace-opencov/PlayMode/TestCoverageResults_0000.xml
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -89,8 +89,6 @@ jobs:
         with: 
           customImage: thesbergen/unityci-resharper
           targetPlatform: StandaloneLinux64
-          buildMethod: Responsible.EditorSetup.ContinuousIntegration.InspectCode
-          customParameters: -disable-assembly-updater
 
       - name: Archive ReSharper run
         if: ${{ always() }}
