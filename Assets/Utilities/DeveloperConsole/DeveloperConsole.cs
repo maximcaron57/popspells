@@ -1,18 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Assets.Utilities.DeveloperConsole
 {
     public class DeveloperConsole
     {
         private readonly string _prefix;
-        private readonly Dictionary<string, IConsoleCommand> _commands;
+        private readonly Dictionary<string, IConsoleCommand> _commands = new Dictionary<string, IConsoleCommand>();
 
-        public DeveloperConsole(string prefix, IEnumerable<IConsoleCommand> commands)
+        public DeveloperConsole()
         {
-            _prefix = prefix;
-            _commands = commands.ToDictionary(x => x.CommandWord);
+            _prefix = "/";
+        }
+
+        public void LoadAssembly(Assembly assembly)
+        {
+            var types = GetTypesWithAttribute<CommandAttribute>(assembly);
+
+            foreach(var type in types)
+            {
+                var instance = (IConsoleCommand)Activator.CreateInstance(type);
+                var attribute = type.GetCustomAttribute<CommandAttribute>();
+                
+                _commands.Add(attribute.Name, instance);
+            }
+        }
+
+        IEnumerable<Type> GetTypesWithAttribute<T>(Assembly assembly)
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.GetCustomAttributes(typeof(T), true).Length > 0)
+                {
+                    yield return type;
+                }
+            }
         }
 
         public void ProcessCommand(string commandInput, string[] args)
@@ -25,7 +49,7 @@ namespace Assets.Utilities.DeveloperConsole
         {
             if (!inputValue.StartsWith(_prefix)) return;
 
-            inputValue.Remove(0, _prefix.Length);
+            inputValue = inputValue.Remove(0, _prefix.Length);
 
             string[] inputSplit = inputValue.Split(' ');
 
