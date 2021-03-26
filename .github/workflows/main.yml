@@ -86,9 +86,9 @@ jobs:
         uses: game-ci/unity-builder@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with: 
-          customImage: thesbergen/unityci-resharper
-          targetPlatform: StandaloneLinux64
+        # with: 
+          # customImage: thesbergen/unityci-resharper
+          # targetPlatform: StandaloneLinux64
 
       - name: Archive ReSharper run
         if: ${{ always() }}
