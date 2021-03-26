@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   test:
-    name: Test PlayMode and EditMode (${{ matrix.unityVersion }})
+    name: Test - PlayMode and EditMode ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -35,7 +35,7 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           
   build:
-    name: Build (${{ matrix.targetPlatform }} ${{ matrix.unityVersion }})
+    name: Build - ${{ matrix.targetPlatform }} ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
