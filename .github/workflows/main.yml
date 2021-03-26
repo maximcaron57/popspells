@@ -14,8 +14,8 @@ jobs:
       matrix:
         # projectPath:
           # - ./
-        unityVersion:
-          - 2020.3.1f1
+        # unityVersion:
+          # - 2020.3.1f1
         testMode:
           - playmode
           - editmode
