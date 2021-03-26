@@ -1,6 +1,9 @@
 ﻿using Assets.Utilities.DeveloperConsole.Commands;
+using System;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
+using Zenject;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace Assets.Utilities.DeveloperConsole
@@ -10,7 +13,7 @@ namespace Assets.Utilities.DeveloperConsole
         [SerializeField]
         private string _prefix = string.Empty;
         [SerializeField]
-        private ConsoleCommand[] _commands = new ConsoleCommand[0];
+        private ConsoleCommandBase[] _commands = new ConsoleCommandBase[0];
 
         [Header("UI")]
         [SerializeField]
@@ -18,25 +21,12 @@ namespace Assets.Utilities.DeveloperConsole
         [SerializeField]
         private TMP_InputField _inputField = null;
 
-        private float pausedTimeScale;
+        private float _pausedTimeScale;
 
         private static DeveloperConsoleBehaviour _instance;
 
+        [Inject]
         private DeveloperConsole _developerConsole;
-
-        // TODO: replace with Lazy<>
-        private DeveloperConsole DeveloperConsole
-        {
-            get
-            {
-                if(DeveloperConsole != null)
-                {
-                    return _developerConsole;
-                }
-
-                return _developerConsole = new DeveloperConsole(_prefix, _commands);
-            }
-        }
 
         private void Awake()
         {
@@ -56,23 +46,30 @@ namespace Assets.Utilities.DeveloperConsole
         {
             if (!context.action.triggered) return;
 
-            if (_uiCanvas.activeSelf)
+            if (!_uiCanvas.activeSelf)
             {
-                Time.timeScale = pausedTimeScale;
-                _uiCanvas.SetActive(false);
-            }
-            else
-            {
-                pausedTimeScale = Time.timeScale;
+                _pausedTimeScale = Time.timeScale;
                 Time.timeScale = 0;
                 _uiCanvas.SetActive(true);
                 _inputField.ActivateInputField();
+                _inputField.onSubmit.AddListener(OnSubmitHandler);
             }
+            else
+            {
+                Time.timeScale = _pausedTimeScale;
+                _uiCanvas.SetActive(false);
+                _inputField.onSubmit.RemoveAllListeners();
+            }
+        }
+
+        private void OnSubmitHandler(string arg0)
+        {
+            ProcessCommand(arg0);
         }
 
         public void ProcessCommand(string input)
         {
-            DeveloperConsole.ProcessCommand(input);
+            _developerConsole.ProcessCommand(input);
 
             _inputField.text = string.Empty;
         }
