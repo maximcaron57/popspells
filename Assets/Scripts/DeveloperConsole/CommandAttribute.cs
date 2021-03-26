@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.Utilities.DeveloperConsole
+namespace Assets.Scripts.DeveloperConsole
 {
     public class CommandAttribute : Attribute
     {

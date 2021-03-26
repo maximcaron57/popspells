@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Utilities.DeveloperConsole.Commands
+namespace Assets.Scripts.DeveloperConsole.Commands
 {
     /// <summary>
     /// Writes something in the debug console
