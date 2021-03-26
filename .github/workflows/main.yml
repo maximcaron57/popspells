@@ -34,7 +34,6 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           customParameters: -enableCodeCoverage
             -coverageResultsPath "artifacts/CodeCoverage/"
-            -coverageOptions assemblyFilters:+Responsible,+Responsible.Editor
             -nographics
             -disable-assembly-updater
       
@@ -52,6 +51,7 @@ jobs:
             artifacts/CodeCoverage/workspace-opencov/PlayMode/TestCoverageResults_0000.xml
           fail_ci_if_error: true
           verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Archive test results
         if: ${{ always() }}
