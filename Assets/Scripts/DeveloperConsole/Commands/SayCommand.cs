@@ -6,7 +6,7 @@ namespace Assets.Scripts.DeveloperConsole.Commands
     /// Writes something in the debug console
     /// </summary>
     [Command("say")]
-    class SayCommand : ConsoleCommandBase
+    public class SayCommand : ConsoleCommandBase
     {
         public override bool Process(string[] args)
         {
