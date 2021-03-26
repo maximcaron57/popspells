@@ -1,7 +1,4 @@
-﻿using Assets.Utilities.DeveloperConsole.Commands;
-using System;
-using System.Reflection;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using Zenject;
 using static UnityEngine.InputSystem.InputAction;
@@ -10,11 +7,6 @@ namespace Assets.Utilities.DeveloperConsole
 {
     public class DeveloperConsoleBehaviour : MonoBehaviour
     {
-        [SerializeField]
-        private string _prefix = string.Empty;
-        [SerializeField]
-        private ConsoleCommandBase[] _commands = new ConsoleCommandBase[0];
-
         [Header("UI")]
         [SerializeField]
         private GameObject _uiCanvas = null;
@@ -26,7 +18,9 @@ namespace Assets.Utilities.DeveloperConsole
         private static DeveloperConsoleBehaviour _instance;
 
         [Inject]
-        private DeveloperConsole _developerConsole;
+#pragma warning disable CS0649
+        private readonly DeveloperConsole _developerConsole;
+#pragma warning restore CS0649
 
         private void Awake()
         {
