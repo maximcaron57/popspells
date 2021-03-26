@@ -35,7 +35,7 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           
   build:
-    name: Build (${{ matrix.targetPlatform }})
+    name: Build (${{ matrix.targetPlatform }} ${{ matrix.unityVersion }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
