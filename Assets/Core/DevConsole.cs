@@ -9,10 +9,4 @@ public class DevConsole : MonoBehaviour
     {
         Debug.developerConsoleVisible = true;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
