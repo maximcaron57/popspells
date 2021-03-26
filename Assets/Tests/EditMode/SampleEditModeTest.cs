@@ -6,33 +6,19 @@ using UnityEngine.TestTools;
 
 namespace Tests
 {
-  public class SampleEditModeTest
-  {
-    [Test]
-    public void TestIncrement()
+    public class SampleEditModeTest
     {
-      // Given
-      var counter = new BasicCounter(0);
+        [Test]
+        public void TestIncrement()
+        {
+            // Given
+            var counter = 0;
 
-      // When
-      counter.Increment();
+            // When
+            counter += 1;
 
-      // Then
-      Assert.AreEqual(1, counter.Count);
+            // Then
+            Assert.AreEqual(1, counter);
+        }
     }
-
-    [Test]
-    public void TestMaxCount()
-    {
-      // Given
-      var counter = new BasicCounter(BasicCounter.MaxCount);
-
-      // When
-      counter.Increment();
-
-      // Then
-      Assert.AreEqual(BasicCounter.MaxCount, counter.Count);
-    }
-
-  }
 }

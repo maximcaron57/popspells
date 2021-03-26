@@ -4,39 +4,36 @@ using UnityEngine.TestTools;
 
 namespace Tests
 {
-  public class SamplePlayModeTest
-  {
-    // A Test behaves as an ordinary method
-    [Test]
-    public void NewTestScriptSimplePasses()
+    public class SamplePlayModeTest
     {
-      // Given
-      var counter = new BasicCounter(0);
+        // A Test behaves as an ordinary method
+        [Test]
+        public void NewTestScriptSimplePasses()
+        {
+            var counter = 0;
 
-      // When
-      counter.Increment();
+            counter += 1;
 
-      // Then
-      Assert.AreEqual(1, counter.Count);
+            Assert.AreEqual(1, counter);
+        }
+
+        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+        // `yield return null;` to skip a frame.
+        [UnityTest]
+        public IEnumerator NewTestScriptWithEnumeratorPasses()
+        {
+            // Given
+            var counter = 3;
+
+            // Use the Assert class to test conditions.
+            // Use yield to skip a frame.
+            yield return null;
+
+            // When
+            counter += 1;
+
+            // Then
+            Assert.AreEqual(4, counter);
+        }
     }
-
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
-    [UnityTest]
-    public IEnumerator NewTestScriptWithEnumeratorPasses()
-    {
-      // Given
-      var counter = new BasicCounter(3);
-
-      // Use the Assert class to test conditions.
-      // Use yield to skip a frame.
-      yield return null;
-
-      // When
-      counter.Increment();
-
-      // Then
-      Assert.AreEqual(4, counter.Count);
-    }
-  }
 }
