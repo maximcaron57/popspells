@@ -12,11 +12,11 @@ jobs:
           - 2020.3.1f1
 
     steps:
-      - uses: actions/checkout@v2
-
-      # - uses: testspace-com/setup-testspace@v1
-        # with:
-          # domain: ${{github.repository_owner}}
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
 
       - name: Cache
         uses: actions/cache@v2.1.2
@@ -29,7 +29,8 @@ jobs:
         uses: game-ci/unity-test-runner@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with: 
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
           unityVersion: ${{ matrix.unityVersion }}
           customParameters: -enableCodeCoverage
             -coverageResultsPath "artifacts/CodeCoverage/"
