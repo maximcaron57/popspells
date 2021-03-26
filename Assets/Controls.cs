@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using static System.Math;
 
 public class Controls : MonoBehaviour
 {
@@ -11,7 +13,16 @@ public class Controls : MonoBehaviour
     private Transform _transform;
     private Transform _camera;
 
-    float _camHeight = 20.0f;
+    // Local constants
+    [SerializeField]
+    const float _CamMaxSpeed = 60.0f;
+    [SerializeField]
+    const float _CamAcceleration = 1.0f;
+    [SerializeField]
+    const float _CamHeight = 20.0f;
+    const float _MinDelta = 0.1f;
+    // Local variables
+    float _camSpeed = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -72,17 +83,21 @@ public class Controls : MonoBehaviour
 
         //TODO_FEATURE: Check if is collision with "camera collision object" such as terrain but not props
         Physics.Raycast(_camera.position, new Vector3(0.0f, -1.0f, 0.0f), out rayHit);
-
         float heightDiff = _camera.position.y - rayHit.point.y;
-        float delta = _camHeight - heightDiff;
-        if (0 < delta)
+        float delta = _CamHeight - heightDiff;
+
+        if (Abs(delta) < _MinDelta)
         {
-            deltaVector.y += delta;
+            _camSpeed = 0.0f;
+            return;
         }
-        else
-        {
-            deltaVector.y += delta;
-        }
+
+        int deltaSign = Sign(delta);
+        var tempSpeed = _CamAcceleration * Time.deltaTime * deltaSign;
+        _camSpeed += Min(Abs(tempSpeed), _CamMaxSpeed) * deltaSign;
+        
+        deltaVector.y += Min(Abs(_camSpeed), Abs(delta)) * deltaSign;
+
         _controller.Move(deltaVector);
 
     }
