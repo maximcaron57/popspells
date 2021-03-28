@@ -8,7 +8,7 @@ namespace popspells.scripts.controllers
     {
         [SerializeField] private Transform _target = null;
         [SerializeField] private Vector3 _offset = new Vector3();
-        [SerializeField] private float _pitch = 2f;
+        [SerializeField] private float _pitch = 20f;
 
         private void LateUpdate()
         {

@@ -43,7 +43,7 @@ namespace popspells.scripts.controllers
                 Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit, layerMask)) {
+                if (Physics.Raycast(ray, out hit)) {
                     PlayerMove(hit.point);
                 }
             }

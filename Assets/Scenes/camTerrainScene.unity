@@ -2863,6 +2863,7 @@ GameObject:
   - component: {fileID: 963194226}
   - component: {fileID: 963194230}
   - component: {fileID: 963194231}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2935,7 +2936,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &963194230
+--- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2943,6 +2944,21 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e11bfdc17b8551b468bbba540aec56da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 1521193584}
+  _offset: {x: 0, y: 20, z: 0}
+  _pitch: 2
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d9858ddfb8c6bd4e96d573e5386af6f, type: 3}
   m_Name: 
@@ -4214,6 +4230,7 @@ GameObject:
   - component: {fileID: 1521193582}
   - component: {fileID: 1521193581}
   - component: {fileID: 1521193580}
+  - component: {fileID: 1521193585}
   - component: {fileID: 1521193579}
   m_Layer: 0
   m_Name: Capsule
@@ -4229,12 +4246,22 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1521193578}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d9858ddfb8c6bd4e96d573e5386af6f, type: 3}
+  m_Script: {fileID: 11500000, guid: bb6c94c5245d12743b0b68bc57d3e4fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 15
+  movement:
+    m_Name: Movement
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 90028a9f-4ef9-4b48-820b-2c537e47b891
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!143 &1521193580
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4330,6 +4357,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!195 &1521193585
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521193578}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 20
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1616723109
 GameObject:
   m_ObjectHideFlags: 0
