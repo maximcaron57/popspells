@@ -2,6 +2,7 @@
 using UnityEngine;
 using Zenject;
 using static UnityEngine.InputSystem.InputAction;
+using static Assets.Utilities.Inputs.InputManager;
 
 namespace Assets.Scripts.DeveloperConsole
 {
@@ -36,10 +37,13 @@ namespace Assets.Scripts.DeveloperConsole
             DontDestroyOnLoad(gameObject);
         }
 
-        public void Toggle(CallbackContext context)
+        public void Update()
         {
-            if (!context.action.triggered) return;
+            if (Input.GetKeyDown(GetKeyCode(InputNames.ToggleConsole))) _instance.Toggle();
+        }
 
+        public void Toggle()
+        {
             if (!_uiCanvas.activeSelf)
             {
                 _pausedTimeScale = Time.timeScale;
