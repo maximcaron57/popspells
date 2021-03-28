@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine;
 
 namespace Assets.Utilities.Inputs
@@ -29,8 +28,6 @@ namespace Assets.Utilities.Inputs
             _KeyMapping[InputNames.LeftFunction]     = KeyCode.A;
             _KeyMapping[InputNames.RightFunction]    = KeyCode.D;
             _KeyMapping[InputNames.ToggleConsole]    = KeyCode.F1;
-
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
         // Returns the key for a given function
