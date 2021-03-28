@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Assets.Scripts.DeveloperConsole.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Assets.Utilities.DeveloperConsole
+namespace Assets.Scripts.DeveloperConsole
 {
-    public class DeveloperConsole
+    public class CommandHandler
     {
         private readonly string _prefix;
         private readonly Dictionary<string, IConsoleCommand> _commands = new Dictionary<string, IConsoleCommand>();
 
-        public DeveloperConsole()
+        public CommandHandler()
         {
             _prefix = "/";
         }

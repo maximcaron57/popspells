@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-namespace Assets.Utilities.DeveloperConsole.Commands
+namespace Assets.Scripts.DeveloperConsole.Commands
 {
     /// <summary>
     /// Writes something in the debug console
     /// </summary>
     [Command("say")]
-    class SayCommand : ConsoleCommandBase
+    public class SayCommand : ConsoleCommandBase
     {
         public override bool Process(string[] args)
         {

@@ -3,7 +3,7 @@ using UnityEngine;
 using Zenject;
 using static UnityEngine.InputSystem.InputAction;
 
-namespace Assets.Utilities.DeveloperConsole
+namespace Assets.Scripts.DeveloperConsole
 {
     public class DeveloperConsoleBehaviour : MonoBehaviour
     {
@@ -19,7 +19,7 @@ namespace Assets.Utilities.DeveloperConsole
 
         [Inject]
 #pragma warning disable CS0649
-        private readonly DeveloperConsole _developerConsole;
+        private readonly CommandHandler _developerConsole;
 #pragma warning restore CS0649
 
         private void Awake()

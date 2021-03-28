@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Assets.Utilities.DeveloperConsole.Commands
+﻿namespace Assets.Scripts.DeveloperConsole.Commands
 {
     public abstract class ConsoleCommandBase : IConsoleCommand
     {
