@@ -33,6 +33,10 @@ namespace Assets.Scripts.DeveloperConsole
             }
 
             _instance = this;
+            _inputField = GetComponentInChildren<TMP_InputField>(true);
+            Transform childTrans = transform.Find("Canvas");
+            _uiCanvas = childTrans.gameObject;
+            if (!_uiCanvas) throw new System.ArgumentException("_uiCanvas cannot be initialized because name name of Canvas changed");
 
             DontDestroyOnLoad(gameObject);
         }
